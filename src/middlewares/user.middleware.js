@@ -1,4 +1,5 @@
 const Errors = require("../utils/errors/index");
+const { verifyJwt } = require("../utils/helper");
 
 const validateCreateUserRequest = (req, res, next) => {
   try {
@@ -46,4 +47,30 @@ const validateLoginUserRequest = (req, res, next) => {
     return res.status(err.statusCode).json(err);
   }
 };
-module.exports = { validateCreateUserRequest, validateLoginUserRequest };
+const isAuth = async (req, res, next) => {
+  try {
+    const token = req.cookies?.token;
+    if (!token) {
+      const err = new Errors.UnAuthorizedError("Token not provided");
+      return res.status(err.statusCode).json(err);
+    }
+    const decoded = await verifyJwt(token);
+    req.user = decoded;
+    console.log(req.user);
+    next();
+  } catch (error) {
+    console.log(error);
+    if (error.name == "JsonWebTokenError") {
+      const err = new Errors.UnAuthorizedError("Invalid token provided");
+      return res.status(err.statusCode).json(err);
+    } else {
+      const err = new Errors.ServerError();
+      return res.status(err.statusCode).json(err);
+    }
+  }
+};
+module.exports = {
+  validateCreateUserRequest,
+  validateLoginUserRequest,
+  isAuth,
+};

@@ -12,4 +12,5 @@ userRouter.post(
   userMiddlewares.validateLoginUserRequest,
   userController.signIn,
 );
+userRouter.post("/logout", userMiddlewares.isAuth, userController.logout);
 module.exports = userRouter;

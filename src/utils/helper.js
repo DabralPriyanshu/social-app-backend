@@ -28,9 +28,13 @@ async function generateToken(user) {
     expiresIn: JWT_EXPIRY,
   });
 }
+async function verifyJwt(token) {
+  return await jwt.verify(token, JWT_SECRET_KEY);
+}
 module.exports = {
   generateErrorObject,
   hashPassword,
   comparePassword,
   generateToken,
+  verifyJwt,
 };

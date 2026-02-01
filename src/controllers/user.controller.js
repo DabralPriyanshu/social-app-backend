@@ -1,6 +1,7 @@
 const userService = require("../services/user.service");
 const { successResponseBody } = require("../utils/responseBody");
 const { StatusCodes } = require("http-status-codes");
+const ServerError = require("../utils/errors/internalserver.error");
 const signUp = async (req, res) => {
   try {
     const userData = {
@@ -28,7 +29,6 @@ const signIn = async (req, res) => {
     successResponseBody.message = "User Logged in  successfully";
     res.cookie("token", response.token, {
       httpOnly: true,
-      secure: true,
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
     return res.status(StatusCodes.OK).json(successResponseBody);
@@ -37,5 +37,19 @@ const signIn = async (req, res) => {
     return res.status(error.statusCode).json(error);
   }
 };
+const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+    });
+    successResponseBody.data = true;
+    successResponseBody.message = "User Logged out successfully";
+    return res.status(StatusCodes.OK).json(successResponseBody);
+  } catch (error) {
+    console.log(error);
+    const err = new ServerError();
+    return res.status(error.statusCode).json(error);
+  }
+};
 
-module.exports = { signUp, signIn };
+module.exports = { signUp, signIn, logout };
