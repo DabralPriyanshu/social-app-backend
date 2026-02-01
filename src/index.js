@@ -1,7 +1,8 @@
 const express = require("express");
+const { PORT } = require("./config/server.config");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.listen(3000, () => {
-  console.log("Server started at port 3000");
+app.listen(PORT, () => {
+  console.log(`Server started at port: ${PORT}`);
 });
