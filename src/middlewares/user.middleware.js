@@ -56,7 +56,6 @@ const isAuth = async (req, res, next) => {
     }
     const decoded = await verifyJwt(token);
     req.user = decoded;
-    console.log(req.user);
     next();
   } catch (error) {
     console.log(error);

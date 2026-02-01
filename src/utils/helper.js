@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const { BCRYPT_SALT } = require("../config/server.config");
 const { JWT_SECRET_KEY, JWT_EXPIRY } = require("../config/server.config");
 const jwt = require("jsonwebtoken");
+const Errors = require("./errors/index");
+const cloudinary = require("../config/cloudinary.config");
 
 function generateErrorObject(error, errorName) {
   let err = [];
@@ -31,10 +33,21 @@ async function generateToken(user) {
 async function verifyJwt(token) {
   return await jwt.verify(token, JWT_SECRET_KEY);
 }
+const uploadToCloudinary = async (filePath) => {
+  try {
+    const response = await cloudinary.uploader.upload(filePath);
+    return { url: response.secure_url, publicId: response.public_id };
+  } catch (error) {
+    console.log("Error while uploading", error);
+    throw new Errors.ServerError();
+  }
+};
+
 module.exports = {
   generateErrorObject,
   hashPassword,
   comparePassword,
   generateToken,
   verifyJwt,
+  uploadToCloudinary,
 };
