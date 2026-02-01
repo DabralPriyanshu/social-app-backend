@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { BCRYPT_SALT } = require("../config/server.config");
+const { JWT_SECRET_KEY, JWT_EXPIRY } = require("../config/server.config");
+const jwt = require("jsonwebtoken");
 
 function generateErrorObject(error, errorName) {
   let err = [];
@@ -17,4 +19,18 @@ async function hashPassword(password) {
   const salt = await bcrypt.genSalt(Number(BCRYPT_SALT));
   return await bcrypt.hash(password, salt);
 }
-module.exports = { generateErrorObject, hashPassword };
+async function comparePassword(userEnterPassword, passwordInDb) {
+  return await bcrypt.compare(userEnterPassword, passwordInDb);
+}
+
+async function generateToken(user) {
+  return await jwt.sign({ id: user._id, email: user.email }, JWT_SECRET_KEY, {
+    expiresIn: JWT_EXPIRY,
+  });
+}
+module.exports = {
+  generateErrorObject,
+  hashPassword,
+  comparePassword,
+  generateToken,
+};

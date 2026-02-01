@@ -5,6 +5,11 @@ const userRouter = express.Router();
 userRouter.post(
   "/register",
   userMiddlewares.validateCreateUserRequest,
-  userController.create,
+  userController.signUp,
+);
+userRouter.post(
+  "/login",
+  userMiddlewares.validateLoginUserRequest,
+  userController.signIn,
 );
 module.exports = userRouter;

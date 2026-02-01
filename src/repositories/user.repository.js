@@ -8,5 +8,12 @@ class UserRepository {
       throw error;
     }
   }
+  async findByEmail(userEmail) {
+    try {
+      return await User.findOne({ email: userEmail });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 module.exports = UserRepository;
