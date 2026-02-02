@@ -44,4 +44,25 @@ const validateCreatePostRequest = (req, res, next) => {
     return res.status(err.statusCode).json(err);
   }
 };
-module.exports = { upload, validateCreatePostRequest };
+const validateCommentOnPostRequest = (req, res, next) => {
+  try {
+    if (!req.params?.id) {
+      const err = new Errors.BadRequestError("Post id is not provided");
+      return res.status(err.statusCode).json(err);
+    }
+    if (!req.body?.text) {
+      const err = new Errors.BadRequestError("please provide comment for post");
+      return res.status(err.statusCode).json(err);
+    }
+    next();
+  } catch (error) {
+    const err = new Errors.ServerError();
+    return res.status(err.statusCode).json(err);
+  }
+};
+
+module.exports = {
+  upload,
+  validateCreatePostRequest,
+  validateCommentOnPostRequest,
+};

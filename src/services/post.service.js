@@ -57,4 +57,24 @@ async function updatePost(postData) {
   }
 }
 
-module.exports = { createPost, updatePost };
+const commentOnPost = async (postData) => {
+  try {
+    const post = await postRepository.findById(postData.postId);
+    if (!post) {
+      throw new Errors.NotFoundError(
+        "Post not found with given id " + postData.postId,
+      );
+    }
+    post.comments.push({ userId: postData.userId, text: postData.text });
+    await post.save();
+    return { commentsCount: post.comments.length };
+  } catch (error) {
+    console.log(error);
+    if (error.err) {
+      throw error;
+    }
+    throw new Errors.ServerError();
+  }
+};
+
+module.exports = { createPost, updatePost, commentOnPost };

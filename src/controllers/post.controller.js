@@ -38,4 +38,21 @@ const likeOrUnlikePost = async (req, res) => {
     return res.status(error.statusCode).json(error);
   }
 };
-module.exports = { createPost, likeOrUnlikePost };
+const addComment = async (req, res) => {
+  try {
+    const postData = {
+      userId: req.user.id,
+      postId: req.params?.id,
+      text: req.body.text,
+    };
+    const response = await postService.commentOnPost(postData);
+    successResponseBody.data = response;
+    successResponseBody.message = "Commented successfully";
+    return res.status(StatusCodes.OK).json(successResponseBody);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.statusCode).json(error);
+  }
+};
+
+module.exports = { createPost, likeOrUnlikePost, addComment };
