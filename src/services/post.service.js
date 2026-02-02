@@ -20,5 +20,41 @@ async function createPost(postData) {
     throw new Errors.ServerError();
   }
 }
+async function updatePost(postData) {
+  try {
+    let post;
+    console.log(postData);
+    if (postData.flag == true) {
+      post = await postRepository.findById(postData.postId);
+      if (!post) {
+        throw new Errors.NotFoundError(
+          "Post not found with given id " + postData.postId,
+        );
+      }
+      if (post.likes.includes(postData.userId)) {
+        return {};
+      }
+      post.likes.push(postData.userId);
+      await post.save();
+      return { likesCount: post.likes.length };
+    } else {
+      post = await postRepository.findById(postData.postId);
+      if (!post) {
+        throw new Errors.NotFoundError(
+          "Post not found with given id " + postData.postId,
+        );
+      }
+      post.likes = post.likes.filter((id) => id.toString() !== postData.userId);
+      await post.save();
+      return { likesCount: post.likes.length };
+    }
+  } catch (error) {
+    console.log(error);
+    if (error.err) {
+      throw error;
+    }
+    throw new Errors.ServerError();
+  }
+}
 
-module.exports = { createPost };
+module.exports = { createPost, updatePost };

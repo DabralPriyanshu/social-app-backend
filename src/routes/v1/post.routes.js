@@ -14,5 +14,6 @@ postRouter.post(
   validateCreatePostRequest,
   postController.createPost,
 );
+postRouter.patch("/like/:id", isAuth, postController.likeOrUnlikePost);
 
 module.exports = postRouter;

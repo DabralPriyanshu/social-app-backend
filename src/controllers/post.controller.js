@@ -18,4 +18,24 @@ const createPost = async (req, res) => {
     return res.status(error.statusCode).json(error);
   }
 };
-module.exports = { createPost };
+
+const likeOrUnlikePost = async (req, res) => {
+  try {
+    const postData = {
+      flag: req.body.flag == "false" || req.body.flag == false ? false : true,
+      userId: req.user.id,
+      postId: req.params?.id,
+    };
+    const response = await postService.updatePost(postData);
+    successResponseBody.data = response;
+    successResponseBody.message =
+      postData.flag == true
+        ? "Post liked successfully"
+        : "Post unlike successfully";
+    return res.status(StatusCodes.OK).json(successResponseBody);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.statusCode).json(error);
+  }
+};
+module.exports = { createPost, likeOrUnlikePost };
