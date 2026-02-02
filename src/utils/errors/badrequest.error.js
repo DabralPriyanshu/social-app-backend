@@ -1,3 +1,4 @@
+///we will throw this class when we have to throw any error related to bad request
 const { StatusCodes } = require("http-status-codes");
 class BadRequestError extends Error {
   constructor(error) {

@@ -1,3 +1,5 @@
+///we will throw this class when we have to throw any error related server error
+
 const { StatusCodes } = require("http-status-codes");
 class InternalServerError extends Error {
   constructor() {

@@ -1,6 +1,7 @@
 const Errors = require("../utils/errors/index");
 const { verifyJwt } = require("../utils/helper");
 
+//this function is use to validate creating a user  request whether all require fields are present or not
 const validateCreateUserRequest = (req, res, next) => {
   try {
     if (!req.body?.email) {
@@ -27,6 +28,7 @@ const validateCreateUserRequest = (req, res, next) => {
     return res.status(err.statusCode).json(err);
   }
 };
+//this function is use to validate login request of a user whether all require fields are present or not
 const validateLoginUserRequest = (req, res, next) => {
   try {
     if (!req.body?.email) {
@@ -47,6 +49,7 @@ const validateLoginUserRequest = (req, res, next) => {
     return res.status(err.statusCode).json(err);
   }
 };
+//this method will check whether the user is authenticate or not 
 const isAuth = async (req, res, next) => {
   try {
     const token = req.cookies?.token;

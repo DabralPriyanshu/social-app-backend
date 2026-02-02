@@ -1,3 +1,5 @@
+//all the env variables are exported from this file
+
 const env = require("dotenv");
 env.config({ quiet: true });
 module.exports = {

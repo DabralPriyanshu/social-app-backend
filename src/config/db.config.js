@@ -1,3 +1,5 @@
+//function connectToDB will connected are server to mongodb database with DB_URL
+
 const mongoose = require("mongoose");
 const { DB_URL } = require("./server.config");
 const connectToDB = async () => {
