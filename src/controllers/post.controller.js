@@ -9,7 +9,12 @@ const createPost = async (req, res) => {
     const postData = {
       userId: req.user.id,
       text: req.body?.text,
-      image: req.file?.path,
+      image: req.file
+        ? {
+            buffer: req.file.buffer,
+            mimetype: req.file.mimetype,
+          }
+        : null,
     };
     const response = await postService.createPost(postData);
     successResponseBody.data = response;

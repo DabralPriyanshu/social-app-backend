@@ -3,7 +3,6 @@ const { uploadToCloudinary } = require("../utils/helper");
 const postRepository = new PostRepository();
 const Errors = require("../utils/errors/index");
 
-
 /*
 |--------------------------------------------------------------------------
 | Create Post Service
@@ -18,10 +17,10 @@ async function createPost(postData) {
   try {
     // If image is provided, upload it to Cloudinary
     if (postData.image) {
-      const filePath = postData.image;
-
+      const file = postData.image;
+      const imageData = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
       // Upload image and get URL & publicId
-      const { url, publicId } = await uploadToCloudinary(filePath);
+      const { url, publicId } = await uploadToCloudinary(imageData);
 
       // Replace local image path with cloudinary data
       postData.image = {};
