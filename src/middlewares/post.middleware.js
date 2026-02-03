@@ -1,42 +1,28 @@
 const multer = require("multer");
-const path = require("node:path");
+
 const Errors = require("../utils/errors/index");
 
-//this is used to create a storage where images will be store before saving to cloudinary multer is a middleware that help us to access files in request body
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname),
-    );
-  },
-});
+const storage = multer.memoryStorage();
 
-// This function checks uploaded file type
-// It allows the request if no file is uploaded or if the file is an image,
-// otherwise it throws an error for invalid file type
-
+// image only filter
 const checkFileFilter = (req, file, cb) => {
   if (!file) {
     cb(null, true);
-  } else if (file.mimetype && file.mimetype.startsWith("image")) {
+  } else if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     cb(new Errors.BadRequestError("Please upload image only"), false);
   }
 };
-// Multer configuration for file upload
-// Uses custom storage, allows only image files, and limits file size to 5MB
+
 const upload = multer({
-  storage: storage,
+  storage,
   fileFilter: checkFileFilter,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
+
 //this request will be use to validate create post request to check whether all the required fields are present ot not
 const validateCreatePostRequest = (req, res, next) => {
   try {

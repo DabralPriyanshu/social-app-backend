@@ -2,7 +2,7 @@ const PostRepository = require("../repositories/post.repository");
 const { uploadToCloudinary } = require("../utils/helper");
 const postRepository = new PostRepository();
 const Errors = require("../utils/errors/index");
-const fs = require("node:fs");
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +27,6 @@ async function createPost(postData) {
       postData.image = {};
       postData.image.url = url;
       postData.image.publicId = publicId;
-
-      // Remove image from local storage
-      fs.unlinkSync(filePath);
     }
 
     // Create post in database
