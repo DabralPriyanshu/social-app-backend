@@ -3,10 +3,7 @@ const { successResponseBody } = require("../utils/responseBody");
 const { StatusCodes } = require("http-status-codes");
 const ServerError = require("../utils/errors/internalserver.error");
 
-
 //controllers only job is to collect the request and pass it to services and collect the response from services and build that response with successResponseBody and pass to client else pass error to client
-
-
 
 const signUp = async (req, res) => {
   try {
@@ -33,8 +30,10 @@ const signIn = async (req, res) => {
     const response = await userService.loginUser(userData);
     successResponseBody.data = response;
     successResponseBody.message = "User Logged in  successfully";
-    res.cookie("token", response.token, {
+    res.cookie("token", token, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
     return res.status(StatusCodes.OK).json(successResponseBody);
@@ -45,7 +44,7 @@ const signIn = async (req, res) => {
 };
 const logout = async (req, res) => {
   try {
-//this will clear the token from the cookie
+    //this will clear the token from the cookie
     res.clearCookie("token", {
       httpOnly: true,
     });
