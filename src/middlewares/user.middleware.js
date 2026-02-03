@@ -52,7 +52,6 @@ const validateLoginUserRequest = (req, res, next) => {
 //this method will check whether the user is authenticate or not
 const isAuth = async (req, res, next) => {
   try {
-    console.log(req.cookies);
     const token = req.cookies?.token;
     if (!token) {
       const err = new Errors.UnAuthorizedError("Token not provided");

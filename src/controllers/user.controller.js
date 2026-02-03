@@ -28,9 +28,13 @@ const signIn = async (req, res) => {
       password: req.body.password,
     };
     const response = await userService.loginUser(userData);
-    successResponseBody.data = response;
+    successResponseBody.data = {
+      id: response.id,
+      username: response.name,
+      email: response.email,
+    };
     successResponseBody.message = "User Logged in  successfully";
-    res.cookie("token", token, {
+    res.cookie("token", response.token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
